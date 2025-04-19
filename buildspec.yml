@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - echo "Instalando Angular CLI"
+      - npm install -g @angular/cli
+      - echo "Instalando dependencias del proyecto"
+      - npm install
+
+  build:
+    commands:
+      - echo "Ejecutando build de Angular"
+      - ng build
+
+  post_build:
+    commands:
+      - echo "Desplegando a S3"
+      - aws s3 sync dist/frontend s3://barberia.lat --delete
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist/frontend
